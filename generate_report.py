@@ -1,11 +1,11 @@
-# generate_report.py
+# generate_report.py - FIXED VERSION
 import pandas as pd
+import numpy as np
 
 def generate_report():
     """Generate a summary report of hypothesis testing results."""
     
-    report = """
-# Insurance Risk Hypothesis Testing Report
+    report = """# Insurance Risk Hypothesis Testing Report
 ## AlphaCare Insurance Solutions (ACIS)
 ### Date: December 2025
 
@@ -24,28 +24,45 @@ This report presents the results of A/B hypothesis testing to identify risk driv
     try:
         results = pd.read_csv("hypothesis_test_results.csv", index_col=0)
         
-        for test_name, p_value in results.items():
-            test_desc = {
-                'province_risk': 'Risk Differences Across Provinces',
-                'zipcode_risk': 'Risk Differences Between Zip Codes',
-                'zipcode_margin': 'Margin Differences Between Zip Codes',
-                'gender_risk': 'Risk Differences Between Women and Men'
-            }.get(test_name, test_name)
+        # Convert Series to dict if needed
+        if isinstance(results, pd.Series):
+            results_dict = results.to_dict()
+        else:
+            # If it's a DataFrame with one column
+            results_dict = results.iloc[:, 0].to_dict()
+        
+        test_descriptions = {
+            'province_risk': 'Risk Differences Across Provinces',
+            'zipcode_risk': 'Risk Differences Between Zip Codes',
+            'zipcode_margin': 'Margin Differences Between Zip Codes',
+            'gender_risk': 'Risk Differences Between Women and Men'
+        }
+        
+        for test_name, p_value in results_dict.items():
+            test_desc = test_descriptions.get(test_name, test_name.replace('_', ' ').title())
             
-            decision = "REJECT" if p_value < 0.05 else "FAIL TO REJECT"
+            # Ensure p_value is a number
+            try:
+                p_val = float(p_value)
+                decision = "REJECT" if p_val < 0.05 else "FAIL TO REJECT"
+            except:
+                p_val = 1.0
+                decision = "INCONCLUSIVE"
             
             report += f"\n### {test_desc}\n"
-            report += f"- **P-value**: {p_value:.6f}\n"
+            report += f"- **P-value**: {p_val:.6f}\n"
             report += f"- **Decision**: {decision} the null hypothesis\n"
             report += f"- **Business Implication**: "
             
-            if p_value < 0.05:
+            if p_val < 0.05:
                 report += "Statistically significant differences exist. Consider adjusting premiums or marketing strategy for this segment.\n"
             else:
                 report += "No statistically significant differences found. Current pricing strategy may be appropriate.\n"
     
     except FileNotFoundError:
         report += "\n*Results file not found. Please run hypothesis testing first.*"
+    except Exception as e:
+        report += f"\n*Error generating report: {str(e)}*"
     
     report += """
 ## Recommendations
