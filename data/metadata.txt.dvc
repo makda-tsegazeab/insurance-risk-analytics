@@ -1,0 +1,5 @@
+outs:
+- md5: 64fc3da35315c0f765f1cc204f74cb32
+  size: 126
+  hash: md5
+  path: metadata.txt

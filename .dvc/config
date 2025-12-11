@@ -1,0 +1,6 @@
+[core]
+    remote = localstorage
+['remote "local-storage"']
+    url = C:/Users/Makda Tsegazeab/dvc-storage/insurance-data
+['remote "localstorage"']
+    url = ../dvc_storage
