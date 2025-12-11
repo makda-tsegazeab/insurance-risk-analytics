@@ -1,16 +1,30 @@
-data/
+# ============================================
+# INSURANCE-RISK-ANALYTICS PROJECT .gitignore
+# ============================================
 
-# DVC specific
+# ------ DVC & Data Management ------
+# Ignore DVC internal cache (data is tracked by DVC, not Git)
 .dvc/tmp/
 .dvc/cache/
 
-# Virtual environment
+# DO NOT ignore .dvc/config or .dvcignore files - they should be tracked!
+
+# ------ Data Folders ------
+# Ignore raw data files (managed by DVC), but keep folder structure
+data/raw/*
+!data/raw/.gitkeep  # Keep empty file to maintain folder in Git
+
+# Interim and processed data can be ignored if they're large
+data/interim/*
+!data/interim/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+
+# ------ Python & Virtual Environment ------
 venv/
 env/
 .venv/
 venv*/
-
-# Python
 __pycache__/
 *.py[cod]
 *$py.class
@@ -35,19 +49,22 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-# Jupyter Notebook
+# ------ Jupyter Notebooks ------
+# IMPORTANT: Remove or comment out this line to track notebooks
+# *.ipynb
 .ipynb_checkpoints/
-*.ipynb
+
+# ------ IDE Specific ------
+# VS Code
+.vscode/
+*.code-workspace
 
 # PyCharm
 .idea/
 *.iml
 *.iws
 
-# VS Code
-.vscode/
-*.code-workspace
-
+# ------ OS Files ------
 # macOS
 .DS_Store
 .AppleDouble
@@ -64,91 +81,35 @@ $RECYCLE.BIN/
 # Linux
 *~
 
-# Logs
+# ------ Logs ------
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Testing
+# ------ Testing ------
 .pytest_cache/
 .coverage
 htmlcov/
 .tox/
-.pytest_cache/
 
-# Documentation
-docs/_build/
-
-# Sphinx
-docs/_build/
-
-# PyCharm
-.idea/
-*.iml
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# IPython
-profile_default/
-ipython_config.py
-
-# Environment variables
+# ------ Environment & Secrets ------
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
-
-# Secrets
 secrets.yml
 credentials.json
 service-account-key.json
 
-# Database files
-*.db
-*.sqlite
-*.sqlite3
-
-# Temporary files
+# ------ Temporary Files ------
 *.tmp
 *.temp
 *.swp
 *.swo
 *~
 
-# Large files (should be in DVC)
-*.csv
-*.parquet
-*.feather
-*.h5
-*.hdf5
-*.pkl
-*.pickle
-*.joblib
-*.npy
-*.npz
-
-# Backup files
+# ------ Backup Files ------
 *.bak
 *.backup
-
-# OS generated files
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-[Tt]humbs.db
-
-# Project specific
-reports/figures/
-reports/temp/
-*.pdf
-*.png
-*.jpg
-*.jpeg
-models/
